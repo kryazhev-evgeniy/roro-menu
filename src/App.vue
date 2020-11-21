@@ -16,14 +16,16 @@
         </q-toolbar-title>
 
         <div>
-          <q-btn
-            flat
-            dense
-            round
-            color="white"
-            icon="fas fa-cog"
-            @click="settings = !settings"
-          />
+          <q-btn flat dense round color="white" icon="fas fa-cog">
+            <q-menu>
+              <div class="row no-wrap q-pa-md">
+                <div class="column">
+                  <div class="text-h6 q-mb-md text-center">Настройки</div>
+                  <q-toggle v-model="darkMode" label="Тёмная тема" />
+                </div>
+              </div>
+            </q-menu>
+          </q-btn>
         </div>
       </q-toolbar>
     </q-header>
@@ -104,34 +106,28 @@
     <q-page-container>
       <router-view></router-view>
     </q-page-container>
-
-    <q-dialog v-model="settings">
-      <q-card>
-        <q-card-section>
-          <div class="text-h6">Настройки</div>
-        </q-card-section>
-
-        <q-card-section class="q-pt-none"> </q-card-section>
-
-        <q-card-actions align="center">
-          <q-btn flat label="OK" color="primary" v-close-popup />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
   </q-layout>
 </template>
 
 <script>
-import { Notify } from "quasar";
+import { Notify, Dark } from "quasar";
 export default {
   name: "LayoutDefault",
 
   components: {},
-
+  computed: {
+    darkMode: {
+      get: () => {
+        return Dark.mode;
+      },
+      set: (newValue) => {
+        Dark.set(newValue);
+      },
+    },
+  },
   data() {
     return {
       leftDrawerOpen: false,
-      settings: false,
     };
   },
   methods: {

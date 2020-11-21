@@ -110,7 +110,7 @@ export default {
     return {
       newPassword: "",
       setPassword: false,
-      addUserDialog: true,
+      addUserDialog: false,
       addUserForm: {
         FIO: "",
         Login: "",

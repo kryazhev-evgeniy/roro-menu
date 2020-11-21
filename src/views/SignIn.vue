@@ -1,11 +1,16 @@
 <template>
   <div>
-    <div>Авторизация</div>
-    <div>
-      <q-input outlined v-model="Login" label="Логин" />
+    <div class="q-ma-xl text-center text-h3">Авторизация</div>
+    <div style="width: 400px; margin: 0 auto;">
+      <q-input outlined v-model="Login" label="Логин" class="q-mb-md" />
       <q-input outlined v-model="Password" label="Пароль" />
       <br />
-      <q-btn label="Войти" @click="signIn()" />
+      <q-btn
+        class="full-width"
+        color="primary"
+        label="Войти"
+        @click="signIn()"
+      />
     </div>
   </div>
 </template>
