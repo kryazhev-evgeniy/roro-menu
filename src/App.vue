@@ -1,6 +1,6 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated class='bg-dark'>
+  <q-layout view="lHh Lpr lFf" dark>
+    <q-header elevated class="bg-dark">
       <q-toolbar>
         <q-btn
           flat
@@ -12,38 +12,33 @@
         />
 
         <q-toolbar-title>
-          admin
+          {{ $store.getters.User.name }}
         </q-toolbar-title>
 
-        <div>...</div>
+        <div>
+          <q-btn
+            flat
+            dense
+            round
+            color="white"
+            icon="fas fa-cog"
+            @click="settings = !settings"
+          />
+        </div>
       </q-toolbar>
     </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-    >
+    <q-drawer v-model="leftDrawerOpen">
       <q-list v-if="$store.getters.isAuth">
         <q-item-label header class="bg-dark text-white">
-          menu
+          {{ $store.getters.User.name }}
         </q-item-label>
-
-        <q-item clickable tag="router-link" to="/about">
+        <q-item clickable @click="logOut()">
           <q-item-section avatar>
-            <q-icon name="fas fa-graduation-cap" />
+            <q-icon name="fas fa-sign-out-alt" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>About</q-item-label>
-            <q-item-label caption>about</q-item-label>
-          </q-item-section>
-        </q-item>
-
-        <q-item clickable tag="router-link" to="/home">
-          <q-item-section avatar>
-            <q-icon name="fas fa-graduation-cap" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Home</q-item-label>
-            <q-item-label caption>home</q-item-label>
+            <q-item-label>Главная</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
@@ -85,25 +80,68 @@
     <q-page-container>
       <router-view></router-view>
     </q-page-container>
+
+    <q-dialog v-model="settings">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">Настройки</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none"> </q-card-section>
+
+        <q-card-actions align="center">
+          <q-btn flat label="OK" color="primary" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-layout>
 </template>
 
 <script>
-
+import { Notify } from "quasar";
 export default {
-  name: 'LayoutDefault',
+  name: "LayoutDefault",
 
-  components: {
-  },
+  components: {},
 
-  data () {
+  data() {
     return {
       leftDrawerOpen: false,
-      dark: false
-    }
-  }
-}
+      settings: false,
+    };
+  },
+  methods: {
+    logOut() {
+      this.$store
+        .dispatch("LogOut")
+        .then(() => {
+          Notify.create({
+            message: `Вышел пользователь`,
+          });
+        })
+        .catch((error) => {
+          Notify.create({
+            message: error,
+          });
+        });
+    },
+  },
+};
 </script>
 
 <style>
+/* хром, сафари */
+*::-webkit-scrollbar {
+  width: 0;
+}
+
+/* ie 10+ */
+* {
+  -ms-overflow-style: none;
+}
+
+/* фф (свойство больше не работает, других способов тоже нет)*/
+* {
+  overflow: -moz-scrollbars-none;
+}
 </style>
