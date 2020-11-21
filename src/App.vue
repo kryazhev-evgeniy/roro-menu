@@ -33,12 +33,36 @@
         <q-item-label header class="bg-dark text-white">
           {{ $store.getters.User.name }}
         </q-item-label>
+
+        <q-item clickable tag="router-link" to="/">
+          <q-item-section avatar>
+            <q-icon name="fas fa-home" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Главная</q-item-label>
+          </q-item-section>
+        </q-item>
+
         <q-item clickable @click="logOut()">
           <q-item-section avatar>
             <q-icon name="fas fa-sign-out-alt" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Главная</q-item-label>
+            <q-item-label>Выход</q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-item
+          clickable
+          tag="router-link"
+          to="/admin/users"
+          v-if="$store.getters.User.isAdmin"
+        >
+          <q-item-section avatar>
+            <q-icon name="fas fa-users-cog" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Пользватели</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>

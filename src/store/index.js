@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
@@ -27,6 +28,9 @@ const store = new Vuex.Store({
   getters: {
     isAuth({ Token }) {
       return !!Token;
+    },
+    Token({ Token }) {
+      return Token;
     },
     User({ User }) {
       return User;
@@ -84,6 +88,63 @@ const store = new Vuex.Store({
         } catch (error) {
           reject(error);
         }
+      });
+    },
+    DeleteUser({ getters }, id) {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: "delete",
+          url: getRootApi("api/user"),
+          headers: {
+            Authorization: getters.Token,
+          },
+          data: {
+            id: id,
+          },
+        })
+          .then(() => {
+            resolve();
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
+    },
+    LoadUsers({ getters }) {
+      return new Promise((resolve, reject) => {
+        axios({
+          url: getRootApi("api/user"),
+          headers: {
+            Authorization: getters.Token,
+          },
+        })
+          .then((resp) => {
+            resolve(resp);
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
+    },
+    SetPassword({ getters }, data) {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: "PUT",
+          url: getRootApi("api/user/setpass"),
+          headers: {
+            Authorization: getters.Token,
+          },
+          data: {
+            id: data.id,
+            password: data.password,
+          },
+        })
+          .then(() => {
+            resolve();
+          })
+          .catch((err) => {
+            reject(err);
+          });
       });
     },
   },
