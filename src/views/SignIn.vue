@@ -1,22 +1,49 @@
 <template>
-  <div>
-    <div class="q-ma-xl text-center text-h3">Авторизация</div>
-    <div style="width: 400px; margin: 0 auto;">
-      <q-input outlined v-model="Login" label="Логин" class="q-mb-md" />
-      <q-input outlined v-model="Password" label="Пароль" />
-      <br />
-      <q-btn
-        class="full-width"
-        color="primary"
-        label="Войти"
-        @click="signIn()"
-      />
+  <q-form @submit="signIn" style="height: 600px;" class="row items-center">
+    <div class="col">
+      <div class="q-mb-md text-center text-h3">Авторизация</div>
+      <div style="width: 400px; margin: 0 auto;">
+        <q-input
+          outlined
+          v-model="Login"
+          label="Логин"
+          class="q-mb-md"
+          lazy-rules
+          :rules="[
+            (val) => (val && val.length > 0) || 'Введите пожалуйста логин',
+          ]"
+        />
+        <q-input
+          outlined
+          v-model="Password"
+          label="Пароль"
+          lazy-rules
+          :rules="[
+            (val) => (val && val.length > 0) || 'Введите пожалуйста пароль',
+          ]"
+        />
+        <br />
+        <div class="row">
+          <q-btn
+            class="full-width"
+            color="primary"
+            label="Войти"
+            type="submit"
+          />
+        </div>
+        <div class="row justify-center items-center" style="height: 70px;">
+          <p class="text-h6">
+            Нет аккаунта?
+            <router-link class="text-primary" to="/signup"
+              >Зарегистрируйся</router-link
+            >
+          </p>
+        </div>
+      </div>
     </div>
-  </div>
+  </q-form>
 </template>
 <script>
-import { Notify } from "quasar";
-
 export default {
   name: "SignIn",
   data: () => {
@@ -36,11 +63,6 @@ export default {
           this.Login = "";
           this.password = "";
           this.$router.push("/");
-        })
-        .catch((err) => {
-          Notify.create({
-            message: err,
-          });
         });
     },
   },
