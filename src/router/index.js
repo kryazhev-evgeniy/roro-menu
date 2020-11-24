@@ -21,6 +21,11 @@ const routes = [
     component: () => import("../views/SignUp.vue"),
   },
   {
+    path: "/test",
+    name: "test",
+    component: () => import("../views/test.vue"),
+  },
+  {
     path: "/admin/users",
     name: "admin-users",
     meta: { auth: true },
