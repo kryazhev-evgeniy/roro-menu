@@ -1,48 +1,52 @@
 <template>
   <div class="q-pa-xl">
     <div class="row items-center justify-between">
-      <h2>Пользователи</h2>
-      <div>
-        <q-btn-group flat rounded>
-          <q-btn
-            rounded
-            color="primary"
-            size="md"
-            padding="md"
-            icon="fa fa-user-plus"
-            @click="addUserDialog = true"
-          >
-            <q-tooltip>
-              Добавить пользователя
-            </q-tooltip>
-          </q-btn>
-          <q-btn
-            rounded
-            color="primary"
-            size="md"
-            padding="md"
-            icon="fa fa-user-minus"
-            :disable="!isSelected && selected.length > 1"
-            @click="deleteUser()"
-          >
-            <q-tooltip>
-              Удалить пользователя
-            </q-tooltip>
-          </q-btn>
-          <q-btn
-            rounded
-            color="primary"
-            size="md"
-            padding="md"
-            icon="fa fa-key"
-            @click="setPassword = true"
-            :disable="!isSelected"
-          >
-            <q-tooltip>
-              Сменить пароль
-            </q-tooltip>
-          </q-btn>
-        </q-btn-group>
+      <div class="col-12 col-md-6">
+        <h2 class="text-center">Пользователи</h2>
+      </div>
+      <div class="col-12 col-md-6">
+        <div class="row justify-center">
+          <q-btn-group flat rounded class="q-ma-lg">
+            <q-btn
+              rounded
+              color="primary"
+              size="md"
+              padding="md"
+              icon="fa fa-user-plus"
+              @click="addUserDialog = true"
+            >
+              <q-tooltip>
+                Добавить пользователя
+              </q-tooltip>
+            </q-btn>
+            <q-btn
+              rounded
+              color="primary"
+              size="md"
+              padding="md"
+              icon="fa fa-user-minus"
+              :disable="!isSelected && selected.length > 1"
+              @click="deleteUser()"
+            >
+              <q-tooltip>
+                Удалить пользователя
+              </q-tooltip>
+            </q-btn>
+            <q-btn
+              rounded
+              color="primary"
+              size="md"
+              padding="md"
+              icon="fa fa-key"
+              @click="setPassword = true"
+              :disable="!isSelected"
+            >
+              <q-tooltip>
+                Сменить пароль
+              </q-tooltip>
+            </q-btn>
+          </q-btn-group>
+        </div>
       </div>
     </div>
     <div>
