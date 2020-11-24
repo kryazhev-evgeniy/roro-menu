@@ -20,6 +20,21 @@
             <q-menu>
               <div class="row no-wrap q-pa-md">
                 <div class="column">
+                  <div class="text-h6 q-mb-md text-center">Дата</div>
+                  <div>
+                    <q-date v-model="days" />
+                  </div>
+                </div>
+              </div>
+            </q-menu>
+          </q-btn>
+        </div>
+
+        <div>
+          <q-btn flat dense round color="white" icon="fas fa-cog">
+            <q-menu>
+              <div class="row no-wrap q-pa-md">
+                <div class="column">
                   <div class="text-h6 q-mb-md text-center">Настройки</div>
                   <q-toggle v-model="darkMode" label="Тёмная тема" />
                 </div>
@@ -113,7 +128,6 @@
 import { Notify, Dark } from "quasar";
 export default {
   name: "LayoutDefault",
-
   components: {},
   computed: {
     darkMode: {
@@ -135,6 +149,7 @@ export default {
       this.$store
         .dispatch("LogOut")
         .then(() => {
+          this.$router.push("/");
           Notify.create({
             message: `Вышел пользователь`,
           });

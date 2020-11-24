@@ -10,6 +10,7 @@
             size="md"
             padding="md"
             icon="fa fa-user-plus"
+            @click="addUserDialog = true"
           >
             <q-tooltip>
               Добавить пользователя
@@ -21,7 +22,7 @@
             size="md"
             padding="md"
             icon="fa fa-user-minus"
-            :disable="!isSelected"
+            :disable="!isSelected && selected.length > 1"
             @click="deleteUser()"
           >
             <q-tooltip>
@@ -46,12 +47,24 @@
     </div>
     <div>
       <q-table
-        :data="users"
+        :data="items"
         :columns="columns"
         row-key="_id"
-        selection="single"
+        selection="multiple"
         :selected.sync="selected"
-      />
+      >
+      </q-table>
+      <div class="q-pa-lg flex flex-center">
+        <q-pagination
+          v-show="pageCount > 1"
+          v-model="page"
+          :max="pageCount"
+          :input="false"
+          :direction-links="true"
+          :boundary-links="true"
+        >
+        </q-pagination>
+      </div>
     </div>
 
     <q-dialog v-model="setPassword" persistent>
@@ -82,30 +95,56 @@
 
     <q-dialog v-model="addUserDialog" persistent>
       <q-card style="min-width: 450px">
-        <q-card-section>
-          <div class="text-h6">Новый Пользователь</div>
-        </q-card-section>
+        <q-form @submit="signUp">
+          <q-card-section>
+            <div class="text-h6">Новый Пользователь</div>
+          </q-card-section>
 
-        <q-card-section class="q-pt-none">
-          <q-input v-model="addUserForm.FIO" label="ФИО" autofocus />
-          <q-input v-model="addUserForm.Login" label="Логин" />
-          <q-input v-model="addUserForm.Password" label="Пароль" />
-          <q-checkbox v-model="addUserForm.isAdmin" label="Администратор" />
-        </q-card-section>
+          <q-card-section class="q-pt-none">
+            <q-input
+              v-model="addUserForm.FIO"
+              label="ФИО"
+              autofocus
+              lazy-rules
+              :rules="[
+                (val) => (val && val.length > 0) || 'Введите пожалуйста ФИО',
+              ]"
+            />
+            <q-input
+              v-model="addUserForm.Login"
+              label="Логин"
+              lazy-rules
+              :rules="[
+                (val) => (val && val.length > 0) || 'Введите пожалуйста логин',
+              ]"
+            />
+            <q-input
+              v-model="addUserForm.Password"
+              label="Пароль"
+              lazy-rules
+              :rules="[
+                (val) => (val && val.length > 0) || 'Введите пожалуйста пароль',
+              ]"
+            />
+            <q-checkbox v-model="addUserForm.isAdmin" label="Администратор" />
+          </q-card-section>
 
-        <q-card-actions align="center" class="text-primary">
-          <q-btn flat label="Выход" v-close-popup />
-          <q-btn flat label="Добавить" v-close-popup @click="signUp" />
-        </q-card-actions>
+          <q-card-actions align="center" class="text-primary">
+            <q-btn flat label="Выход" v-close-popup />
+            <q-btn flat label="Добавить" type="submit" />
+          </q-card-actions>
+        </q-form>
       </q-card>
     </q-dialog>
   </div>
 </template>
 <script>
+import PaginationMixin from "../../mixins/pagination.mixin";
 import { Notify } from "quasar";
 
 export default {
   name: "Users",
+  mixins: [PaginationMixin],
   data() {
     return {
       newPassword: "",
@@ -117,8 +156,15 @@ export default {
         Password: "",
         isAdmin: false,
       },
-      users: [],
       columns: [
+        {
+          name: "isAdmin",
+          label: "Администратор",
+          field: "isAdmin",
+          align: "left",
+          sortable: true,
+          style: "width: 50px",
+        },
         {
           name: "username",
           label: "ФИО",
@@ -135,6 +181,7 @@ export default {
         },
       ],
       selected: [],
+      page: 1,
     };
   },
   computed: {
@@ -148,21 +195,24 @@ export default {
   },
   mounted() {
     this.$store.dispatch("LoadUsers").then((resp) => {
-      this.users = resp.data;
+      this.setupPagination(resp.data);
     });
   },
   methods: {
     deleteUser() {
-      this.$store
-        .dispatch("DeleteUser", this.selected[0]._id)
-        .then(() => {
-          this.$store.dispatch("LoadUsers").then((resp) => {
-            this.users = resp.data;
+      this.selected.forEach((item) => {
+        this.$store
+          .dispatch("DeleteUser", item._id)
+          .then(() => {
+            this.addUserDialog = false;
+            this.$store.dispatch("LoadUsers").then((resp) => {
+              this.setupPagination(resp.data);
+            });
+          })
+          .catch((err) => {
+            console.log(err);
           });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      });
     },
     setPasswordUser() {
       this.$store
@@ -191,7 +241,7 @@ export default {
         })
         .then(() => {
           this.$store.dispatch("LoadUsers").then((resp) => {
-            this.users = resp.data;
+            this.setupPagination(resp.data);
           });
           this.addUserForm.Password = "";
           this.addUserForm.Login = "";
