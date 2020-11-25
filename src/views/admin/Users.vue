@@ -25,7 +25,7 @@
               size="md"
               padding="md"
               icon="fa fa-user-minus"
-              :disable="!isSelected && selected.length > 1"
+              :disable="!selected.length > 0"
               @click="deleteUser()"
             >
               <q-tooltip>
@@ -39,7 +39,7 @@
               padding="md"
               icon="fa fa-key"
               @click="setPassword = true"
-              :disable="!isSelected"
+              :disable="!selected.length > 0 || selected.length > 1"
             >
               <q-tooltip>
                 Сменить пароль
@@ -162,14 +162,6 @@ export default {
       },
       columns: [
         {
-          name: "isAdmin",
-          label: "Администратор",
-          field: "isAdmin",
-          align: "left",
-          sortable: true,
-          style: "width: 50px",
-        },
-        {
           name: "username",
           label: "ФИО",
           field: "username",
@@ -227,6 +219,9 @@ export default {
         .then(() => {
           this.newPassword = "";
           this.setPassword = false;
+          this.$store.dispatch("LoadUsers").then((resp) => {
+            this.setupPagination(resp.data);
+          });
         })
         .catch((err) => {
           this.$q.notify({
