@@ -2,10 +2,11 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
+import DishModule from "./dish";
 
 Vue.use(Vuex);
 
-function getRootApi(path) {
+export function getRootApi(path) {
   return `http://localhost:3000/${path}`;
 }
 
@@ -148,6 +149,7 @@ const store = new Vuex.Store({
       });
     },
   },
+  modules: [DishModule],
 });
 
 export default store;

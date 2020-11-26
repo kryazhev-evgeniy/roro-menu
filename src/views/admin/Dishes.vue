@@ -5,7 +5,13 @@
         <div class="col-12 col-md-6">
           <div class="row items-center">
             <p class="text-center text-h3 q-ma-sm">Блюда</p>
-            <q-btn flat round color="primary" icon="fas fa-plus">
+            <q-btn
+              flat
+              round
+              color="primary"
+              icon="fas fa-plus"
+              @click="addFormDish = true"
+            >
               <q-tooltip>
                 Добавить блюдо
               </q-tooltip>
@@ -17,43 +23,51 @@
     </header>
     <div class="content shadow-2">
       <div class="row">
-        <div class="col-12 col-sm-6 col-md-4" v-for="index in 30" :key="index">
-          <q-card class="shadow-0 q-ma-sm">
-            <q-img src="https://cdn.quasar.dev/img/parallax2.jpg">
-              <div class="absolute-bottom">
-                <div class="text-h6">Our Changing Planet</div>
-                <div class="text-subtitle2">by John Doe</div>
-              </div>
-            </q-img>
-            <q-card-actions align="center">
-              <q-btn flat color="primary" icon="fas fa-trash-alt"> </q-btn>
-              <q-btn flat color="primary" icon="fas fa-edit" />
-              <q-btn flat color="primary" icon="fas fa-eye" @click="showDish" />
-            </q-card-actions>
-          </q-card>
-        </div>
+        <DishCard
+          v-for="(dish, index) in dishes"
+          :key="index"
+          :dish="dish"
+          @deleted="deletedDish"
+        />
       </div>
     </div>
 
-    <q-dialog v-model="viewDish">
-      <q-card>
+    <q-dialog v-model="addFormDish" persistent>
+      <q-card style="min-width: 350px">
         <q-card-section class="row items-center q-pb-none">
-          <div class="text-h6">Close icon</div>
+          <div class="text-h6">Добавить блюдо</div>
           <q-space />
           <q-btn icon="fas fa-times" flat round dense v-close-popup />
         </q-card-section>
 
-        <q-card-section>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum
-          repellendus sit voluptate voluptas eveniet porro. Rerum blanditiis
-          perferendis totam, ea at omnis vel numquam exercitationem aut, natus
-          minima, porro labore. Lorem ipsum dolor sit amet consectetur
-          adipisicing elit. Rerum repellendus sit voluptate voluptas eveniet
-          porro. Rerum blanditiis perferendis totam, ea at omnis vel numquam
-          exercitationem aut, natus minima, porro labore. Lorem ipsum dolor sit
-          amet consectetur adipisicing elit. Rerum repellendus sit voluptate
-          voluptas eveniet porro. Rerum blanditiis perferendis totam, ea at
-          omnis vel numquam exercitationem aut, natus minima, porro labore.
+        <q-card-section class="q-pt-md">
+          <q-form @submit.prevent="addDishHandler">
+            <q-input
+              outlined
+              placeholder="Название"
+              v-model="addForm.name"
+              :error="$v.addForm.name.$error"
+            />
+            <q-input
+              outlined
+              type="textarea"
+              placeholder="Описание"
+              v-model="addForm.description"
+              :error="$v.addForm.description.$error"
+            />
+            <q-input
+              outlined
+              placeholder="Изображение"
+              v-model="addForm.urlImage"
+              :error="$v.addForm.urlImage.$error"
+            />
+            <q-btn
+              flat
+              label="add"
+              type="submit"
+              class="full-width text-primary"
+            />
+          </q-form>
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -61,15 +75,75 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+import { required } from "vuelidate/lib/validators";
+
 export default {
   name: "Dishes",
   data: () => ({
-    viewDish: false,
+    dishes: [],
+    addFormDish: false,
+    addForm: {
+      name: "",
+      description: "",
+      urlImage: "",
+    },
   }),
+  validations: {
+    addForm: {
+      name: { required },
+      description: { required },
+      urlImage: { required },
+    },
+  },
+  computed: {},
   methods: {
+    ...mapActions(["LoadDishes", "AddDish"]),
+    setup() {
+      this.LoadDishes()
+        .then((resp) => {
+          this.dishes = resp.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    removeItemOnce(arr, value) {
+      var index = arr.indexOf(value);
+      if (index > -1) {
+        arr.splice(index, 1);
+      }
+      return arr;
+    },
     showDish() {
       this.viewDish = true;
     },
+    addDishHandler() {
+      this.$v.addForm.$touch();
+
+      if (this.$v.addForm.$error) {
+        this.$q.notify("Заполните все поля");
+        return;
+      }
+
+      this.AddDish(this.addForm)
+        .then((resp) => {
+          this.$q.notify("Блюдо Добавлено");
+          this.dishes.push(resp.data);
+        })
+        .catch((err) => {
+          this.$q.notify(err);
+        });
+    },
+    deletedDish(val) {
+      this.removeItemOnce(this.dishes, val);
+    },
+  },
+  mounted() {
+    this.setup();
+  },
+  components: {
+    DishCard: () => import("../../components/DishCard"),
   },
 };
 </script>
