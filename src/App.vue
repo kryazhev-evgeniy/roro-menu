@@ -97,6 +97,20 @@
               <q-item-label>Блюда</q-item-label>
             </q-item-section>
           </q-item>
+
+          <q-item
+            clickable
+            tag="router-link"
+            to="/admin/mealtime"
+            v-if="$store.getters.User.isAdmin"
+          >
+            <q-item-section avatar>
+              <q-icon name="fas fa-users-cog" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>Приёмы пищи</q-item-label>
+            </q-item-section>
+          </q-item>
         </q-list>
 
         <q-list v-if="!$store.getters.isAuth">
@@ -147,6 +161,7 @@
 
 <script>
 import { Notify, Dark } from "quasar";
+
 export default {
   name: "LayoutDefault",
   components: {},
@@ -164,6 +179,15 @@ export default {
     return {
       leftDrawerOpen: false,
       splashScreen: false,
+      routes: [
+        { icon: "fas fa-home", auth: false, title: "Главная", link: "/" },
+        {
+          icon: "fas fa-users-cog",
+          auth: false,
+          title: "Пользователи",
+          link: "/",
+        },
+      ],
     };
   },
   methods: {

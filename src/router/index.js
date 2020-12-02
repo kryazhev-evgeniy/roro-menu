@@ -33,7 +33,7 @@ const routes = [
   },
   {
     path: "/admin/dishes",
-    name: "admin-dihes",
+    name: "admin-dishes",
     meta: { auth: true },
     component: () => import("../views/admin/Dishes.vue"),
   },
