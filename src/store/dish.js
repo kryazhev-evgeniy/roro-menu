@@ -26,5 +26,12 @@ export default {
         },
       });
     },
+    UpdateDish(store, data) {
+      return axios({
+        method: "PUT",
+        url: getRootApi("api/dish"),
+        data: data,
+      });
+    },
   },
 };

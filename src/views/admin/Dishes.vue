@@ -28,6 +28,7 @@
           :key="index"
           :dish="dish"
           @deleted="deletedDish"
+          @edit="editDish"
         />
       </div>
     </div>
