@@ -1,11 +1,35 @@
 <template>
   <div class="q-ma-xl">
     <header>
-      <div class="row">
-        <div class="col text-h1">
+      <div class="row items-center justify-between">
+        <div class=" text-h1 text-center">
           Меню
         </div>
-        <div class="col"></div>
+        <q-btn
+          class="q-pa-sm"
+          icon="fas fa-calendar-week"
+          round
+          color="primary"
+        >
+          <q-popup-proxy
+            @before-show="updateProxy"
+            transition-show="scale"
+            transition-hide="scale"
+          >
+            <q-date v-model="proxyDate" :events="events" event-color="orange">
+              <div class="row items-center justify-end q-gutter-sm">
+                <q-btn label="Cancel" color="primary" flat v-close-popup />
+                <q-btn
+                  label="OK"
+                  color="primary"
+                  flat
+                  @click="save"
+                  v-close-popup
+                />
+              </div>
+            </q-date>
+          </q-popup-proxy>
+        </q-btn>
       </div>
     </header>
     <div>
@@ -31,6 +55,9 @@ export default {
   data() {
     return {
       mealtimes: [],
+      date: "2019/02/01",
+      proxyDate: "2019/02/01",
+      events: ["2019/02/01", "2019/02/05", "2019/02/06"],
     };
   },
   computed: {

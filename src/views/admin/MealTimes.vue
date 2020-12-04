@@ -146,8 +146,8 @@ export default {
           this.dishSelected = [];
         });
     },
-    deletedMealtime(id) {
-      this.$store.dispatch("DeleteMealTime", id).then((Response) => {
+    deletedMealtime(mealtime) {
+      this.$store.dispatch("DeleteMealTime", mealtime._id).then((Response) => {
         this.$q.notify(Response.data);
         this.$store.dispatch("LoadMealTimes").then((Response) => {
           this.mealtimes = Response.data;

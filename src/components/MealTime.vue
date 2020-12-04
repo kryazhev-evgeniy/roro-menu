@@ -138,6 +138,7 @@ export default {
   name: "MealTime",
   props: {
     mealTime: Object,
+    mealTimeID: Number,
     readOnly: {
       type: Boolean,
       default: false,
@@ -181,7 +182,7 @@ export default {
         });
     },
     deletedMealtime() {
-      this.$emit("deleted", this.mealTime._id);
+      this.$emit("deleted", this.mealTime);
     },
     deleteDishMealTime(row) {
       var index = this.mealTime.dishes.indexOf(row);

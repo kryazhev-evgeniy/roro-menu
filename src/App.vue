@@ -21,21 +21,6 @@
               <q-menu>
                 <div class="row no-wrap q-pa-md">
                   <div class="column">
-                    <div class="text-h6 q-mb-md text-center">Дата</div>
-                    <div>
-                      <q-date v-model="days" />
-                    </div>
-                  </div>
-                </div>
-              </q-menu>
-            </q-btn>
-          </div>
-
-          <div>
-            <q-btn flat dense round color="white" icon="fas fa-cog">
-              <q-menu>
-                <div class="row no-wrap q-pa-md">
-                  <div class="column">
                     <div class="text-h6 q-mb-md text-center">Настройки</div>
                     <q-toggle v-model="darkMode" label="Тёмная тема" />
                   </div>
@@ -109,6 +94,20 @@
             </q-item-section>
             <q-item-section>
               <q-item-label>Приёмы пищи</q-item-label>
+            </q-item-section>
+          </q-item>
+
+          <q-item
+            clickable
+            tag="router-link"
+            to="/admin/daydish"
+            v-if="$store.getters.User.isAdmin"
+          >
+            <q-item-section avatar>
+              <q-icon name="fas fa-users-cog" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>Дни меню</q-item-label>
             </q-item-section>
           </q-item>
         </q-list>

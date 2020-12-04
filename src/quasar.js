@@ -1,5 +1,5 @@
 import Vue from "vue";
-
+import langRu from "quasar/lang/ru";
 import "./styles/quasar.styl";
 import iconSet from "quasar/icon-set/fontawesome-v5.js";
 import "@quasar/extras/roboto-font/roboto-font.css";
@@ -13,4 +13,5 @@ Vue.use(Quasar, {
   components: {
     QTooltip,
   },
+  lang: langRu,
 });

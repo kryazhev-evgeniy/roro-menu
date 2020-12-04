@@ -8,6 +8,11 @@ export default {
         url: getRootApi("api/dish"),
       });
     },
+    LoadDishID(store, id) {
+      return axios({
+        url: getRootApi(`api/dish/search/${id}`),
+      });
+    },
     // eslint-disable-next-line no-unused-vars
     AddDish({ commit }, data) {
       return axios({

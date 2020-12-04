@@ -43,6 +43,12 @@ const routes = [
     meta: { auth: true },
     component: () => import("../views/admin/MealTimes.vue"),
   },
+  {
+    path: "/admin/daydish",
+    name: "admin-daydish",
+    meta: { auth: true },
+    component: () => import("../views/admin/DayDish.vue"),
+  },
 ];
 
 const router = new VueRouter({
