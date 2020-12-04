@@ -6,7 +6,7 @@
           <div class="text-h5 text-center">{{ dish.name }}</div>
         </div>
       </q-img>
-      <q-card-actions align="center">
+      <q-card-actions align="center" v-if="!readOnly">
         <q-btn
           flat
           color="primary"
@@ -82,6 +82,10 @@ export default {
   name: "DishCard",
   props: {
     dish: Object,
+    readOnly: {
+      type: Boolean,
+      default: false,
+    },
   },
   data: () => ({
     viewDish: false,

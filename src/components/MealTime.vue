@@ -1,7 +1,16 @@
 <template>
   <div>
-    <div>
-      <h3>{{ mealTime.name }}</h3>
+    <div class="row justify-between items-center">
+      <h1>{{ mealTime.name }}</h1>
+      <q-btn
+        v-if="!readOnly"
+        flat
+        round
+        class="q-pa-md"
+        color="primary"
+        icon="fas fa-trash-alt"
+        @click="deletedMealtime"
+      />
     </div>
     <div class="row">
       <div
@@ -15,9 +24,6 @@
               <div class="text-h6">{{ dish.name }}</div>
             </div>
           </q-img>
-          <q-card-actions align="right">
-            <q-btn flat class="full-width">Перейти</q-btn>
-          </q-card-actions>
         </q-card>
       </div>
     </div>
@@ -29,6 +35,15 @@ export default {
   name: "MealTime",
   props: {
     mealTime: Object,
+    readOnly: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  methods: {
+    deletedMealtime() {
+      this.$emit("deleted", this.mealTime._id);
+    },
   },
 };
 </script>

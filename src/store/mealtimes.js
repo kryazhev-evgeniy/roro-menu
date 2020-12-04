@@ -8,5 +8,19 @@ export default {
         url: getRootApi("api/mealtime"),
       });
     },
+    AddMealTime(store, data) {
+      return axios({
+        method: "POST",
+        url: getRootApi("api/mealtime"),
+        data: data,
+      });
+    },
+    DeleteMealTime(store, id) {
+      return axios({
+        method: "DELETE",
+        url: getRootApi("api/mealtime"),
+        data: { id: id },
+      });
+    },
   },
 };

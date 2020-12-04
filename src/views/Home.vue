@@ -13,6 +13,7 @@
         v-for="(mealtime, index) in mealtimes"
         :key="index"
         :mealTime="mealtime"
+        :readOnly="true"
       />
     </div>
   </div>
