@@ -92,6 +92,7 @@ export default {
       },
     },
     mealtimes: [],
+    editMealtimeForm: {},
     dishes: [],
     dishSelected: [],
     dishesColumns: [
@@ -141,6 +142,8 @@ export default {
           this.$q.notify(`Добавлен приём пищи ${Response.data.name}`);
           this.dialogs.addMealtime = false;
           this.mealtimes.push(Response.data);
+          this.dialogs.form.name = "";
+          this.dishSelected = [];
         });
     },
     deletedMealtime(id) {

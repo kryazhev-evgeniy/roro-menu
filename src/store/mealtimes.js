@@ -22,5 +22,12 @@ export default {
         data: { id: id },
       });
     },
+    UpdateMealTime(store, data) {
+      return axios({
+        method: "PUT",
+        url: getRootApi("api/mealtime"),
+        data,
+      });
+    },
   },
 };
