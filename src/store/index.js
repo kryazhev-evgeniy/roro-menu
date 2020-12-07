@@ -5,6 +5,8 @@ import axios from "axios";
 import DishModule from "./dish";
 import MealTimeModulle from "./mealtimes";
 import DayDishModule from "./DayDish";
+import ExelModule from "./exel";
+import fs from "fs";
 
 Vue.use(Vuex);
 
@@ -150,8 +152,11 @@ const store = new Vuex.Store({
           });
       });
     },
+    SaveFile(store, buffer) {
+      fs.writeFileSync("doc.xlsx", buffer);
+    },
   },
-  modules: [DishModule, MealTimeModulle, DayDishModule],
+  modules: [DishModule, MealTimeModulle, DayDishModule, ExelModule],
 });
 
 export default store;

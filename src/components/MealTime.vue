@@ -52,7 +52,6 @@
           />
           <q-table
             class="dishesTable"
-            style="height: 600px"
             title="Блюда"
             :data="mealTime.dishes"
             grid
@@ -157,15 +156,6 @@ export default {
   },
   methods: {
     submitMealTime() {
-      console.log({
-        id: this.mealTime._id,
-        new: {
-          name: this.mealTime.name,
-          dishes: this.mealTime.dishes.map((item) => {
-            return item._id;
-          }),
-        },
-      });
       this.$store
         .dispatch("UpdateMealTime", {
           id: this.mealTime._id,

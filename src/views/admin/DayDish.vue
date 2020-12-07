@@ -54,28 +54,7 @@
           <p class="text-h4">Длбавить меню на день</p>
         </q-card-section>
         <q-card-section>
-          <q-input
-            class="q-mr-lg"
-            filled
-            v-model="dialogs.addDayDish.date"
-            mask="date"
-            :rules="['date']"
-          >
-            <template v-slot:append>
-              <q-icon name="fas fa-calendar-week" class="cursor-pointer">
-                <q-popup-proxy
-                  ref="qDateProxy"
-                  transition-show="scale"
-                  transition-hide="scale"
-                >
-                  <q-date v-model="date">
-                    <div class="row items-center justify-end">
-                      <q-btn v-close-popup label="Close" color="primary" flat />
-                    </div>
-                  </q-date>
-                </q-popup-proxy>
-              </q-icon>
-            </template>
+          <q-input class="q-mr-lg" filled v-model="dialogs.addDayDish.date">
           </q-input>
         </q-card-section>
         <q-card-section>
@@ -236,7 +215,7 @@ export default {
       addDayDish: {
         active: false,
         edit: false,
-        date: "2019/02/01",
+        date: new Date(),
         mealtimes: [],
       },
       editDayDish: {

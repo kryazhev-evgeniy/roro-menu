@@ -1,42 +1,44 @@
 <template>
   <div class="q-ma-xl">
-    <header>
-      <div class="row items-center justify-between">
-        <div class=" text-h1 text-center">
-          Меню
+    <header class="q-ma-md">
+      <p class="text-h3 text-center">меню</p>
+      <div class="row justify-center">
+        <p class="text-center text-h5">
+          {{ dayDishes[selectedDayDish].date }}
+        </p>
+      </div>
+      <div class="col">
+        <div class="row justify-center">
+          <q-btn
+            color="primary"
+            icon="fas fa-chevron-left"
+            flat
+            label="Назад"
+            @click="LeftDay()"
+          />
+          <q-btn
+            color="primary"
+            icon-right="fas fa-chevron-right"
+            flat
+            label="Вперёд"
+            @click="RightDay()"
+          />
         </div>
-        <q-btn
-          class="q-pa-sm"
-          icon="fas fa-calendar-week"
-          round
-          color="primary"
-        >
-          <q-popup-proxy
-            @before-show="updateProxy"
-            transition-show="scale"
-            transition-hide="scale"
-          >
-            <q-date v-model="proxyDate" :events="events" event-color="orange">
-              <div class="row items-center justify-end q-gutter-sm">
-                <q-btn label="Cancel" color="primary" flat v-close-popup />
-                <q-btn
-                  label="OK"
-                  color="primary"
-                  flat
-                  @click="save"
-                  v-close-popup
-                />
-              </div>
-            </q-date>
-          </q-popup-proxy>
-        </q-btn>
+        <div class="row justify-center q-mt-md">
+          <q-btn
+            flat
+            color="green"
+            label="Выгрузить в exel"
+            @click="exportToExcel()"
+          />
+        </div>
       </div>
     </header>
     <div>
       <MealTime
-        v-for="(mealtime, index) in mealtimes"
+        v-for="(meatime, index) in dayDishes[selectedDayDish].mealTimes"
         :key="index"
-        :mealTime="mealtime"
+        :mealTime="meatime"
         :readOnly="true"
       />
     </div>
@@ -54,19 +56,50 @@ export default {
   },
   data() {
     return {
-      mealtimes: [],
-      date: "2019/02/01",
+      dayDishes: [],
+      selectedDayDish: 0,
       proxyDate: "2019/02/01",
-      events: ["2019/02/01", "2019/02/05", "2019/02/06"],
+      events: [],
     };
   },
   computed: {
     ...mapGetters(["isAuth"]),
   },
   mounted() {
-    this.$store.dispatch("LoadMealTimes").then((resp) => {
-      this.mealtimes = resp.data;
+    this.$store.dispatch("LoadDayDish").then((resp) => {
+      this.dayDishes = resp.data;
+      this.selectedDayDish = this.dayDishes.length - 1;
     });
+  },
+  methods: {
+    LeftDay() {
+      console.log(this.selectedDayDish);
+      if (this.selectedDayDish < this.dayDishes.length - 1) {
+        this.selectedDayDish += 1;
+      } else {
+        this.selectedDayDish = this.dayDishes.length - 1;
+      }
+    },
+    RightDay() {
+      if (this.selectedDayDish > 0) {
+        this.selectedDayDish -= 1;
+      } else {
+        this.selectedDayDish = this.dayDishes.length - 1;
+      }
+    },
+    exportToExcel() {
+      this.$store
+        .dispatch("DownloadFileExcel", this.dayDishes[this.selectedDayDish]._id)
+        .then((response) => {
+          var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+          var fileLink = document.createElement("a");
+          fileLink.href = fileURL;
+          fileLink.setAttribute("download", "doc.xlsx");
+          document.body.appendChild(fileLink);
+          fileLink.click();
+          console.log(response.data);
+        });
+    },
   },
 };
 </script>

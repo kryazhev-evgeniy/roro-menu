@@ -31,5 +31,12 @@ export default {
         data,
       });
     },
+    DownloadFileExcel(store, id) {
+      return axios({
+        url: getRootApi(`api/daydish/download/${id}`),
+        method: "GET",
+        responseType: "blob",
+      });
+    },
   },
 };
